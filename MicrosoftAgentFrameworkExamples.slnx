@@ -1,0 +1,15 @@
+<Solution>
+  <Folder Name="/examples/" />
+  <Folder Name="/examples/01-BasicChatbot/">
+    <Project Path="examples/01-BasicChatbot/BasicChatbot.csproj" />
+  </Folder>
+  <Folder Name="/examples/02-SingleAgentWithTools/">
+    <Project Path="examples/02-SingleAgentWithTools/SingleAgentWithTools.csproj" />
+  </Folder>
+  <Folder Name="/examples/03-MultiAgentOrchestrator/">
+    <Project Path="examples/03-MultiAgentOrchestrator/MultiAgentOrchestrator.csproj" />
+  </Folder>
+  <Folder Name="/examples/04-AdvancedPatterns/">
+    <Project Path="examples/04-AdvancedPatterns/AdvancedPatterns.csproj" />
+  </Folder>
+</Solution>
