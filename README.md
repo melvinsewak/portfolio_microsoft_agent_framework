@@ -74,7 +74,7 @@ Production-ready patterns and best practices:
 
 ### Prerequisites
 
-- **.NET 8.0 SDK** or later ([Download](https://dotnet.microsoft.com/download))
+- **.NET 10.0 SDK** or later ([Download](https://dotnet.microsoft.com/download))
 - **Azure OpenAI Service** access with API keys
   - Or OpenAI API keys (with minor code modifications)
 - **Visual Studio 2022**, **VS Code**, or **Rider** (optional)
@@ -186,7 +186,7 @@ Build and verify all examples:
 
 ```bash
 # Build entire solution
-dotnet build
+dotnet build MicrosoftAgentFrameworkExamples.sln
 
 # Run all examples in demo mode (no API keys required)
 cd examples/01-BasicChatbot && dotnet run && cd ../..

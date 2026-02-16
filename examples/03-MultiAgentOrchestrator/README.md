@@ -122,7 +122,7 @@ public async Task<string> ProcessRequestAsync(string userRequest)
 ## Running the Example
 
 ### Prerequisites
-1. .NET 8.0 SDK or later
+1. .NET 10.0 SDK or later
 2. Azure OpenAI service with API key
 
 ### Configuration
@@ -199,8 +199,8 @@ await _emailAgent.SendConfirmationAsync(booking);
 
 ## Advanced Orchestration
 
-### Parallel Execution
-Execute independent tasks concurrently:
+### Parallel Execution (Optional Pattern)
+For independent tasks, you can execute agent calls concurrently:
 
 ```csharp
 var tasks = new[]
@@ -212,6 +212,8 @@ var tasks = new[]
 
 var results = await Task.WhenAll(tasks);
 ```
+
+**Note**: The current example executes agents sequentially for simplicity. Use parallel execution when agents don't depend on each other's results.
 
 ### Conditional Workflows
 Dynamic routing based on context:

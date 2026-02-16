@@ -36,7 +36,7 @@ var chatClient = azureClient.GetChatClient(deploymentName).AsIChatClient();
 ## Running the Example
 
 ### Prerequisites
-1. .NET 8.0 SDK or later
+1. .NET 10.0 SDK or later
 2. Azure OpenAI service with API key
 
 ### Configuration Options

@@ -71,7 +71,7 @@ GetWeather("Seattle") // Returns: "Weather in Seattle: Sunny, 83°F"
 ## Running the Example
 
 ### Prerequisites
-1. .NET 8.0 SDK or later
+1. .NET 10.0 SDK or later
 2. Azure OpenAI service with API key (for real tool calling)
 
 ### Configuration
@@ -163,8 +163,22 @@ For I/O operations, use async methods:
 [Description("Fetches data from an API")]
 public async Task<string> FetchDataAsync(string url)
 {
+    // IMPORTANT: Validate URLs to prevent SSRF attacks
+    if (!Uri.TryCreate(url, UriKind.Absolute, out var uri) ||
+        (uri.Scheme != Uri.UriSchemeHttp && uri.Scheme != Uri.UriSchemeHttps))
+    {
+        throw new ArgumentException("Invalid URL. Only absolute HTTP/HTTPS URLs are allowed.", nameof(url));
+    }
+
+    // Allowlist of external APIs this tool is permitted to call
+    var allowedHosts = new[] { "api.example.com", "contoso.com" };
+    if (!Array.Exists(allowedHosts, h => string.Equals(h, uri.Host, StringComparison.OrdinalIgnoreCase)))
+    {
+        throw new InvalidOperationException("The requested URL host is not allowed.");
+    }
+
     using var client = new HttpClient();
-    return await client.GetStringAsync(url);
+    return await client.GetStringAsync(uri);
 }
 ```
 

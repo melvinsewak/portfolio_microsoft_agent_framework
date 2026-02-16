@@ -2,7 +2,6 @@
 using Azure.AI.OpenAI;
 using Azure;
 using Microsoft.Extensions.Configuration;
-using System.Text.Json;
 
 namespace AdvancedPatterns;
 
@@ -57,7 +56,7 @@ class Program
                     await DemoStreamingResponses(chatClient);
                     break;
                 case "2":
-                    await DemoConversationMemory(chatClient);
+                    await DemoConversationMemory();
                     break;
                 case "3":
                     await DemoErrorHandling(chatClient);
@@ -107,7 +106,7 @@ class Program
             "   • Ability to process partial responses");
     }
 
-    static async Task DemoConversationMemory(IChatClient chatClient)
+    static async Task DemoConversationMemory()
     {
         Console.WriteLine("\n=== Pattern 2: Conversation Memory Management ===\n");
 
@@ -181,7 +180,6 @@ class Program
         Console.WriteLine("   • Automatic retry with exponential backoff");
         Console.WriteLine("   • Rate limit detection and handling");
         Console.WriteLine("   • Graceful degradation");
-        Console.WriteLine("   • Circuit breaker patterns");
     }
 
     static async Task DemoObservability(IChatClient chatClient)
@@ -338,7 +336,10 @@ public class ObservableChatClient
         var requestId = Guid.NewGuid();
         var startTime = DateTime.UtcNow;
 
-        Console.WriteLine($"   📤 Request {requestId:N}: {messages.Last().Text?[..Math.Min(50, messages.Last().Text?.Length ?? 0)]}...");
+        // NOTE: In production, avoid logging full message content to prevent PII/secret leakage
+        // Consider redacting sensitive data or using a flag to disable content logging
+        var messagePreview = messages.Last().Text?[..Math.Min(50, messages.Last().Text?.Length ?? 0)] ?? "";
+        Console.WriteLine($"   📤 Request {requestId:N}: {messagePreview}...");
 
         try
         {

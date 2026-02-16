@@ -2,7 +2,6 @@
 using Azure.AI.OpenAI;
 using Azure;
 using Microsoft.Extensions.Configuration;
-using System.ComponentModel;
 
 namespace MultiAgentOrchestrator;
 
@@ -38,14 +37,16 @@ class Program
         {
             var azureClient = new AzureOpenAIClient(new Uri(endpoint), new AzureKeyCredential(apiKey));
             
+            // Create a single chat client instance to reuse across all agents
+            var chatClient = azureClient.GetChatClient(deploymentName).AsIChatClient();
+            
             // Create specialized agents
-            var travelAgent = new TravelAgent(azureClient.GetChatClient(deploymentName).AsIChatClient());
-            var calendarAgent = new CalendarAgent(azureClient.GetChatClient(deploymentName).AsIChatClient());
-            var emailAgent = new EmailAgent(azureClient.GetChatClient(deploymentName).AsIChatClient());
+            var travelAgent = new TravelAgent();
+            var calendarAgent = new CalendarAgent();
+            var emailAgent = new EmailAgent();
             
             // Create orchestrator
             var orchestrator = new OrchestratorAgent(
-                azureClient.GetChatClient(deploymentName).AsIChatClient(),
                 travelAgent,
                 calendarAgent,
                 emailAgent
@@ -118,18 +119,15 @@ class Program
 /// </summary>
 public class OrchestratorAgent
 {
-    private readonly IChatClient _chatClient;
     private readonly TravelAgent _travelAgent;
     private readonly CalendarAgent _calendarAgent;
     private readonly EmailAgent _emailAgent;
 
     public OrchestratorAgent(
-        IChatClient chatClient,
         TravelAgent travelAgent,
         CalendarAgent calendarAgent,
         EmailAgent emailAgent)
     {
-        _chatClient = chatClient;
         _travelAgent = travelAgent;
         _calendarAgent = calendarAgent;
         _emailAgent = emailAgent;
@@ -177,13 +175,6 @@ public class OrchestratorAgent
 /// </summary>
 public class TravelAgent
 {
-    private readonly IChatClient _chatClient;
-
-    public TravelAgent(IChatClient chatClient)
-    {
-        _chatClient = chatClient;
-    }
-
     public async Task<string> HandleRequestAsync(string request)
     {
         Console.WriteLine("   ✈️  Travel Agent processing...");
@@ -208,13 +199,6 @@ public class TravelAgent
 /// </summary>
 public class CalendarAgent
 {
-    private readonly IChatClient _chatClient;
-
-    public CalendarAgent(IChatClient chatClient)
-    {
-        _chatClient = chatClient;
-    }
-
     public async Task<string> HandleRequestAsync(string request)
     {
         Console.WriteLine("   📅 Calendar Agent processing...");
@@ -234,13 +218,6 @@ public class CalendarAgent
 /// </summary>
 public class EmailAgent
 {
-    private readonly IChatClient _chatClient;
-
-    public EmailAgent(IChatClient chatClient)
-    {
-        _chatClient = chatClient;
-    }
-
     public async Task<string> HandleRequestAsync(string request)
     {
         Console.WriteLine("   📧 Email Agent processing...");
