@@ -241,7 +241,7 @@ For questions or issues:
 
 ## 🔄 Version Compatibility
 
-- **.NET**: 8.0 or later (all examples target `net8.0`)
+- **.NET**: 10.0 or later (all examples target `net10.0`)
 - **Microsoft.Extensions.AI**: 10.3.0 or later
 - **Azure.AI.OpenAI**: 2.1.0 or later
 - Compatible with both **Azure OpenAI** and **OpenAI API**
